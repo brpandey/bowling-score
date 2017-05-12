@@ -1,11 +1,15 @@
-### Bowling Score
+Bowling Score
+=============
 
-# Given a valid sequence of bowling game frame scores returns the game score
-# NOTE: Doesn't do any validation of sequence, expects a valid sequence
+![Logo](https://raw.githubusercontent.com/brpandey/bowling-score/master/priv/images/score.jpg)
 
-# See Examples
+Given a valid sequence of bowling game frame scores returns the game score
+NOTE: Doesn't do any validation of sequence, expects a valid sequence
 
-## Example 1
+#### Run iex -S mix in the bowling directory
+#### See Examples
+
+### Example 1
 
 ```elixir
       # Parens () denote carryovers
@@ -36,7 +40,7 @@
       71 = Bowling.Score.calculate(sequence)
 ```
 
-## Example 2
+### Example 2
 
 ```elixir
       # Parens () denote carryovers
@@ -65,7 +69,7 @@
       88 = Bowling.Score.calculate(sequence)
 ```
 
-## Example 3
+### Example 3
 
 ```elixir
       # Roll 1 : 10    : 10
@@ -100,7 +104,7 @@
       300 = Bowling.Score.calculate(sequence)
 ```
 
-## Example 4
+### Example 4
 
 ```elixir
       # 1 : 5             : 5
