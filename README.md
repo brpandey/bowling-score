@@ -3,8 +3,8 @@ Bowling Score
 
 ![Logo](https://raw.githubusercontent.com/brpandey/bowling-score/master/priv/images/score.jpg)
 
-Given a valid sequence of bowling game frame scores returns the game score
-NOTE: Doesn't do any validation of sequence, expects a valid sequence
+Given a valid sequence of roll entries, returns the game score. 
+Doesn't do any validation of sequence, expects a valid sequence
 
 #### Run iex -S mix in the bowling directory
 #### See Examples
@@ -82,7 +82,7 @@ NOTE: Doesn't do any validation of sequence, expects a valid sequence
       # Roll 8 : 10    : 180 + 10 + (10 + 10) => 210
       # Roll 9 : 10    : 210 + 10 + (10 + 10) => 240
       # Roll 10 : 10   : 240 + 10 + (10 + 10) => 270
-      # Roll 11 : 10   : 270 + 10 + (10) => 290    ### Roll 9's carryover is added in Roll 11
+      # Roll 11 : 10   : 270 + 10 + (10) => 290    ### Roll 9's carryover
       # Roll 12 : 10   : 290 + 10 => 300
 
       # Frame 1 : 10 + (Roll 2 Strike + Roll 3 Strike)
@@ -100,7 +100,8 @@ NOTE: Doesn't do any validation of sequence, expects a valid sequence
 
       # 10 Frames * (10 + 10 + 10) = 10 * 30 = 300
 
-      sequence = [:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike]
+      sequence = [:strike,:strike,:strike,:strike,:strike,:strike,:strike,
+                        :strike,:strike,:strike,:strike,:strike]
       300 = Bowling.Score.calculate(sequence)
 ```
 
@@ -129,13 +130,15 @@ NOTE: Doesn't do any validation of sequence, expects a valid sequence
       # 10 : {:spare, 5}  : 140 + 5 => 145
       # 10 : 5            : 145 + 5 => 150 # last frame we don't add spare carryover
 
-      sequence = [5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5]
+      sequence = [5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,
+                        :spare,5,:spare,5,:spare,5,:spare,5]
       150 = Bowling.Score.calculate(sequence)
 ```
 
 
 
 
-Bowling is COOL! And Learning how the game is scored FINALLY makes sense!! 
+Bowling is COOL! :bowling: 
+And Learning how the game is scored FINALLY makes sense!! :ledger:
 
-** Thanks, Bibek **
+Thanks, Bibek
