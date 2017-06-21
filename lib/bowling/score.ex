@@ -4,28 +4,37 @@ defmodule Bowling.Score do
   the game score. Does not determine validity of sequences
 
   For example here is a valid sequence list:
-  [2,1,:strike,4,:spare,2,4,4,2,2,7,:strike,4,2,3,1,4,2]
+  [2,1,:strike,4,:spare,2,4,4,2,2,7,:strike,4,2,3,:dash,4,2]
   """
 
 
   @strike 10
   @frames 10
+  @dash   0
 
-  # Scan through list for :spare entries,
+  # Scan through list for :spare or :dash entries,
   # convert :spare into {:spare, remaining_frame_pins}
   defp preprocess(list) when is_list(list) do
 
     {_, reversed_list} =
-      Enum.reduce(list, {nil, []}, fn i, {prev, list_acc} -> 
+      Enum.reduce(list, {nil, []}, fn roll, {prev, list_acc} -> 
 
         # if spare, create a tuple with spare and remaining pins knocked down
-        val = if (i == :spare) do {:spare, @strike - prev} else i end
+        # if dash, convert to score of 0 for a roll
+        # otherwise, just pass the value of the roll as the value
+
+        updated = 
+          case roll do
+            :spare -> {:spare, @strike - prev} 
+            :dash -> @dash
+            _ -> roll
+          end
 
         # prepend to new list
-        new_list = [val | list_acc] # prepend is O(1)
+        new_list = [updated | list_acc] # prepend is O(1)
 
-        # set val as the new prev
-        {val, new_list}
+        # set the updated val as the new prev
+        {updated, new_list}
       end)
 
     Enum.reverse reversed_list
@@ -79,7 +88,7 @@ defmodule Bowling.Score do
 
     {_, score, _} = 
       # reduce preprocessed list, with roll number n equal to 1, 0 total score, and
-      # no carryover flags set
+      # no carryover flags set initially
       Enum.reduce(l, {1, 0, :no_carryover}, fn val, {n, score_acc, flag_acc} ->
         
         # Process carryovers
@@ -91,7 +100,7 @@ defmodule Bowling.Score do
           # just add up the roll scores with no new carryovers, meaning no chaining
           n > (@frames - 1) * 2 -> {n, score_acc + value(val), flag_acc}
 
-          # Otherwise process all frame rolls up to the last frame
+          # Otherwise process all frame rolls taking into account chaining
           true ->
             case val do
               # For strike, increment up 2 rolls, add the strike 10 and then

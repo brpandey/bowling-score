@@ -11,6 +11,22 @@ defmodule Bowling.Score.Test do
     end
 
 
+    test "empty rolls" do
+
+      sequence = [1,2,3,:dash,1,2,3,4,4,4,4,4,4,3,2,:dash,4,3,2,1]
+      assert 51 == Bowling.Score.calculate(sequence)
+
+    end
+
+
+    test "empty rolls with strikes" do
+
+      sequence = [2,1,:strike,4,:dash,:strike,:strike,2,7,:strike,4,2,3,:dash,4,:dash]
+      assert 100 == Bowling.Score.calculate(sequence)
+
+    end
+
+
     test "strikes with no back to back" do
       sequence = [1,2,:strike,1,2,:strike,4,4,2,2,2,2,2,2,1,1,1,1]
 
