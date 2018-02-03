@@ -2,44 +2,50 @@ defmodule Bowling.Score.Test do
   use ExUnit.Case, async: true
 
   describe "valid sequences" do
-
     test "no strikes or spares" do
-
-      sequence = [1,2,3,4,1,2,3,4,4,4,4,4,4,3,2,1,4,3,2,1]
+      sequence = [1, 2, 3, 4, 1, 2, 3, 4, 4, 4, 4, 4, 4, 3, 2, 1, 4, 3, 2, 1]
       assert 56 == Bowling.Score.calculate(sequence)
-
     end
-
 
     test "empty rolls" do
-
-      sequence = [1,2,3,:dash,1,2,3,4,4,4,4,4,4,3,2,:dash,4,3,2,1]
+      sequence = [1, 2, 3, :dash, 1, 2, 3, 4, 4, 4, 4, 4, 4, 3, 2, :dash, 4, 3, 2, 1]
       assert 51 == Bowling.Score.calculate(sequence)
-
     end
-
 
     test "empty rolls with strikes" do
+      sequence = [
+        2,
+        1,
+        :strike,
+        4,
+        :dash,
+        :strike,
+        :strike,
+        2,
+        7,
+        :strike,
+        4,
+        2,
+        3,
+        :dash,
+        4,
+        :dash
+      ]
 
-      sequence = [2,1,:strike,4,:dash,:strike,:strike,2,7,:strike,4,2,3,:dash,4,:dash]
       assert 100 == Bowling.Score.calculate(sequence)
-
     end
 
-
     test "strikes with no back to back" do
-      sequence = [1,2,:strike,1,2,:strike,4,4,2,2,2,2,2,2,1,1,1,1]
+      sequence = [1, 2, :strike, 1, 2, :strike, 4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1]
 
-#      (1 + 2) + (10 + 1 + 2) + (1 + 2) + (10 + 4 + 4) + (4 + 4) + 3(2 + 2) + 2(1 + 1)
-#      3 + 13 + 3 + 18 + 8 + 12 + 4 = 19 + 18 + 20 + 4 = 37 + 20 + 4 = 57 + 4 = 61
+      #      (1 + 2) + (10 + 1 + 2) + (1 + 2) + (10 + 4 + 4) + (4 + 4) + 3(2 + 2) + 2(1 + 1)
+      #      3 + 13 + 3 + 18 + 8 + 12 + 4 = 19 + 18 + 20 + 4 = 37 + 20 + 4 = 57 + 4 = 61
 
       assert 61 == Bowling.Score.calculate(sequence)
     end
 
-
     test "back to back strikes" do
-      sequence = [1,2,:strike,:strike,5,2,4,4,2,2,2,2,2,2,1,1,1,1]
-
+      sequence = [1, 2, :strike, :strike, 5, 2, 4, 4, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1]
 
       # Parens () denote carryovers
       # addition without parens indicate the sum of just the current roll score
@@ -58,10 +64,7 @@ defmodule Bowling.Score.Test do
       assert 76 == Bowling.Score.calculate(sequence)
     end
 
-
-
     test "spares mixed together" do
-
       # Parens () denote carryovers
       # addition without parens indicate the sum of just the current roll score
 
@@ -86,14 +89,11 @@ defmodule Bowling.Score.Test do
       # 10 : 4          : 65 + 4 => 69
       # 10 : 2          : 69 + 2 => 71
 
-      sequence = [1,2,3,:spare,3,:spare,4,4,2,2,2,:spare,2,1,1,1,1,5,4,2]
+      sequence = [1, 2, 3, :spare, 3, :spare, 4, 4, 2, 2, 2, :spare, 2, 1, 1, 1, 1, 5, 4, 2]
       assert 71 == Bowling.Score.calculate(sequence)
-
     end
 
-
     test "strikes and spares mixed together case 1" do
-
       # Parens () denote carryovers
       # addition without parens indicate the sum of just the current roll score
 
@@ -116,14 +116,11 @@ defmodule Bowling.Score.Test do
       # 10 : 3            : 84 + 3 => 87
       # 10 : 1            : 87 + 1 => 88
 
-      sequence = [2,:spare,:strike,6,2,4,4,2,2,:strike,4,2,1,1,1,1,3,1]
+      sequence = [2, :spare, :strike, 6, 2, 4, 4, 2, 2, :strike, 4, 2, 1, 1, 1, 1, 3, 1]
       assert 88 == Bowling.Score.calculate(sequence)
-
     end
 
-
     test "strikes and spares mixed together case 2" do
-
       # Parens () denote carryovers
       # addition without parens indicate the sum of just the current roll score
 
@@ -146,21 +143,35 @@ defmodule Bowling.Score.Test do
       # 10 : 4             : 82 + 4 => 86
       # 10 : 2             : 86 + 2 => 88
 
-      sequence = [2,1,:strike,4,:spare,2,4,4,2,2,7,:strike,4,2,3,1,4,2]
+      sequence = [2, 1, :strike, 4, :spare, 2, 4, 4, 2, 2, 7, :strike, 4, 2, 3, 1, 4, 2]
       assert 88 == Bowling.Score.calculate(sequence)
-
     end
 
-
     test "strikes and spares mixed together case 3" do
+      sequence = [
+        2,
+        1,
+        :strike,
+        4,
+        :spare,
+        :strike,
+        :strike,
+        2,
+        7,
+        :strike,
+        4,
+        2,
+        3,
+        :spare,
+        4,
+        :spare,
+        7
+      ]
 
-      sequence = [2,1,:strike,4,:spare,:strike,:strike,2,7,:strike,4,2,3,:spare,4,:spare,7]
       assert 146 == Bowling.Score.calculate(sequence)
-
     end
 
     test "all strikes" do
-
       # Roll 1 : 10    : 10
       # Roll 2 : 10    : 10 + 10 + (10) => 30
       # Roll 3 : 10    : 30 + 10 + (10 + 10) => 60
@@ -185,18 +196,27 @@ defmodule Bowling.Score.Test do
       # Frame 9 : 10 + (Roll 10 Strike + Roll 11 Strike)
       # Frame 10 : 10 + (10 + 10)                            : 
 
-
-
       # 10 Frames * (10 + 10 + 10) = 10 * 30 = 300
 
-      sequence = [:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike,:strike]
-      assert 300 == Bowling.Score.calculate(sequence)
+      sequence = [
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike,
+        :strike
+      ]
 
+      assert 300 == Bowling.Score.calculate(sequence)
     end
 
-
     test "all spares" do
-
       # 1 : 5             : 5
       # 1 : {:spare, 5}   : 5 + 5 => 10
       # 2 : 5             : 10 + 5 + (5) => 20
@@ -219,12 +239,31 @@ defmodule Bowling.Score.Test do
       # 10 : {:spare, 5}  : 140 + 5 => 145
       # 10 : 5            : 145 + 5 => 150 # last frame we don't add spare carryover
 
-      sequence = [5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5,:spare,5]
+      sequence = [
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5,
+        :spare,
+        5
+      ]
+
       assert 150 == Bowling.Score.calculate(sequence)
-
     end
-
-    
   end
-
 end
